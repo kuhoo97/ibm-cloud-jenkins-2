@@ -3,7 +3,10 @@ package com.example.employee1service.controller;
 
 import com.example.employee1service.model.Employee;
 import com.example.employee1service.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,12 @@ public class EmployeeController {
     private EmployeeService employeeService;
     private Environment environment;
 
+    @Autowired
+    public EmployeeController(EmployeeService employeeService,Environment environment) {
+        this.employeeService = employeeService;
+        this.environment = environment;
+    }
+
     @GetMapping
     public ResponseEntity<StringBuilder> getStatus()
     {
@@ -31,7 +40,7 @@ public class EmployeeController {
     @PostMapping("/employees")
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee)
     {
-        return new ResponseEntity<Employee>(employeeService.createEmployee(employee), HttpStatus.CREATED);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(employeeService.createEmployee(employee));
     }
 
     @GetMapping("/employees")
